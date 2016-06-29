@@ -88,7 +88,7 @@
                     <ul>
                         <li>Understand the basic features of the catalyst cloud so you can create your own website</li>
                         <li>Gain familiarity with the <a href="http://docs.catalystcloud.io/">Catalyst Cloud Documentation</a></li>
-                        <li>Gain familiarity with software automation using Ansible</li>
+                        <li>Gain familiarity with software automation using <a href="https://www.ansible.com/">Ansible</a></li>
                     </ul>
                 </section>
 
@@ -242,9 +242,8 @@
                 <section>
                     <h3>Training room settings</h3>
                     <ul>
-                        <li>Prefix all resource names with yourname-</li>
-                        <li>eg: yourname-border-router, yourname-first-instance</li>
-                        <li>Use your training PC number as the third octet in your network</li>
+                        <li>Prefix SSH key, security group and instance resource names with "yourname-"</li>
+                        <li>eg: yourname-first-instance, yourname-first-instance-key</li>
                     </ul>
                 </section>
 
@@ -291,49 +290,105 @@ The key's randomart image is:
 
                 <section>
                     <h3>Upload an SSH keypair</h3>
+                    <p><a href="http://docs.catalystcloud.io/first-instance/dashboard.html#uploading-an-ssh-key">http://docs.catalystcloud.io/first-instance/dashboard.html#uploading-an-ssh-key</a></p>
+                    <pre><code data-trim contenteditable>
+$ sudo apt-get install xclip
+$ cat ~/.ssh/id_rsa.pub | xclip
+                    </code></pre>
                 </section>
 
                 <section>
                     <h3>Create security groups</h3>
+                    <p><a href="http://docs.catalystcloud.io/first-instance/dashboard.html#configure-instance-security-group">http://docs.catalystcloud.io/first-instance/dashboard.html#configure-instance-security-group</a></p>
+                    <p>Add a second rule for port 80 equivalent to the rule you have added for port 22</p>
                 </section>
 
                 <section>
                     <h3>Create a server</h3>
                     <ul>
-                        <li>Create a security group</li>
-                        <li>Launch an instance</li>
-                        <li>Associate a floating IP</li>
-                        <li>Log in to your instance</li>
+                        <li><a href="http://docs.catalystcloud.io/first-instance/dashboard.html#booting-an-instance">Launch an instance</a></li>
+                        <li><a href="http://docs.catalystcloud.io/first-instance/dashboard.html#allocate-a-floating-ip">Associate a floating IP</a></li>
+                        <li><a href="http://docs.catalystcloud.io/first-instance/dashboard.html#connect-to-the-new-instance">Log in to your instance</a></li>
                     </ul>
                 </section>
 
                 <section>
                     <h3>Connect to server</h3>
+                    <p>If you cannot ssh to your instance have a look at this <a href="http://docs.catalystcloud.io/faq/cant-ssh-to-instance.html">FAQ</a></p>
                 </section>
 
                 <section>
                     <h3>Create a static website</h3>
+                    <ul>
+                        <li>Follow the instructions at <a href="https://gohugo.io/overview/quickstart/">https://gohugo.io/overview/quickstart/</a> to create a static website</li>
+                        <li>Call your site something unique rather than <strong>bookshelf</strong></li>
+                        <li>Choose a <a href="http://themes.gohugo.io/">theme</a> to use</li>
+                        <li>Step 7: baseurl = "http://train01.gamma.net.nz/"</li>
+                        <li>Skip Steps 8, 10 and 12</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Commands 1</h3>
+                    <pre><code data-trim contenteditable>
+$ wget https://github.com/spf13/hugo/releases/download/v0.16/hugo_0.16-1_amd64.deb
+$ sudo dpkg -i hugo_0.16-1_amd64.deb
+$ hugo new site foobar
+$ cd foobar/
+$ hugo new post/first-post.md
+$ echo "This is my first post!" &gt;&gt; content/post/first-post.md
+$ cd themes/
+$ git clone https://github.com/dim0627/hugo_theme_robust.git
+$ cd ..
+$ hugo server --theme=hugo_theme_robust --buildDrafts
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Commands 2</h3>
+                    <pre><code data-trim contenteditable>
+$ vi config.toml
+$ cat config.toml
+baseurl = "http://train01.gamma.net.nz/"
+languageCode = "en-nz"
+title = "SoT Masterclass!"
+
+[Params]
+  Author = "Your Name"
+$ hugo undraft content/post/first-post.md
+$ hugo --theme=hugo_theme_robust
+$ # static html is now stored in public folder
+                    </code></pre>
                 </section>
 
                 <section>
                     <h3>Configure DNS</h3>
+                    <p>Check DNS and ensure your domain name is pointing at the floating IP address of your instance</p>
+                    <pre><code data-trim contenteditable>
+$ host train01.gamma.net.nz
+                    </code></pre>
                 </section>
 
                 <section>
                     <h3>Upload the website</h3>
+                    <p>Copy the public directory to the webserver</p>
+                    <pre><code data-trim contenteditable>
+$ cd foobar/
+$ scp -r public/ ubuntu@103.254.156.118:
+                    </code></pre>
                 </section>
 
                 <section>
                     <h3>Configure the webserver</h3>
+                    <pre><code data-trim contenteditable>
+$ ssh ubuntu@150.242.42.156
+$ sudo apt-get install nginx
+$ cd public
+$ sudo mv * /usr/share/nginx/html/
+$ sudo chown -R root:root /usr/share/nginx/html/
+                    </code></pre>
                 </section>
 
-                </section>
-
-                <section>
-                    <h3>First Instance using the dashboard</h3>
-                    <ul>
-                        <li><a href="http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-from-the-dashboard">http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-from-the-dashboard</a></li>
-                    </ul>
                 </section>
 
                 <section>
@@ -412,46 +467,6 @@ The key's randomart image is:
                         <li>Install clients</li>
                         <li>Source an OpenStack RC file</li>
                     </ul>
-                </section>
-
-                <section>
-                    <h3>First Instance using the command line</h3>
-                    <ul>
-                        <li><a href="http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-from-the-command-line">http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-from-the-command-line</a></li>
-                        <li>Continue to use the custom training room settings</li>
-                        <li>You will need to edit commands</li>
-                        <li>After you have done it manually you can try running the bash script</li>
-                    </ul>
-                </section>
-
-                <section>
-                <section>
-                    <h3>First Instance using Heat</h3>
-                    <ul>
-                        <li><a href="http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-using-heat">http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-using-heat</a></li>
-                        <li>Clone orchestration repo</li>
-                        <li>Upload SSH key</li>
-                        <li>Update parameters (see next slide)</li>
-                        <li>stackcreate</li>
-                        <li>stackupdate</li>
-                        <li>stackdelete</li>
-                    </ul>
-                </section>
-                <section>
-                    <h3>Update these Heat parameters</h3>
-                    <ul>
-                        <li>key_name</li>
-                        <li>private_net_name</li>
-                        <li>private_subnet_name</li>
-                        <li>private_net_cidr</li>
-                        <li>private_net_gateway</li>
-                        <li>private_net_pool_start</li>
-                        <li>private_net_pool_end</li>
-                        <li>router_name</li>
-                        <li>secgroup_name</li>
-                        <li>host_name</li>
-                    </ul>
-                </section>
                 </section>
 
                 <section>
@@ -577,22 +592,20 @@ localhost                  : ok=6    changed=0    unreachable=0    failed=0
                 </section>
 
                 <section>
-                    <h3>First Instance using Ansible</h3>
+                    <h3>Delete resources</h3>
+                    <ul>
+                        <li>SSH Keypair</li>
+                        <li>Secuity Group</li>
+                        <li>Instance</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Repeat webserver build using Ansible</h3>
                     <ul>
                         <li><a href="http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-using-ansible">http://docs.catalystcloud.io/first-instance.html#launching-your-first-instance-using-ansible</a></li>
                         <li>Clone catalystcloud-ansible repo</li>
                         <li>Install Ansible</li>
-                        <li>Edit launch-instance and create-network playbooks</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h3>Review Resources</h3>
-                    <ul>
-                        <li><a href="http://docs.catalystcloud.io/tutorials.html">Tutorials</a></li>
-                        <li><a href="http://docs.catalystcloud.io/faq.html">FAQs</a></li>
-                        <li><a href="https://github.com/catalyst/catalystcloud-ansible">Ansible Repo</a></li>
-                        <li><a href="https://github.com/catalyst/catalystcloud-orchestration">Orchestration Repo</a></li>
+                        <li>Edit example-playbooks/sot-masterclass playbook</li>
                     </ul>
                 </section>
 
@@ -600,12 +613,11 @@ localhost                  : ok=6    changed=0    unreachable=0    failed=0
                     <h3>Exercises</h3>
                     <ul>
                         <li>Redo something you have not fully completed</li>
-                        <li>Use the <a href="http://docs.catalystcloud.io/network.html#virtual-private-networks">docs</a> to setup a Region to Region VPN</li>
-                        <li>Have a go setting up a stack using HEAT Templates in the <a href="https://github.com/catalyst/catalystcloud-orchestration">Orchestration Repo</a></li>
                         <li>Have a go at one of the example playbooks in the <a href="https://github.com/catalyst/catalystcloud-ansible">Ansible Repo</a></li>
+                        <li>Have a go at setting up your first instance using the command line</li>
+                        <li>Have a go at setting up your first instance using heat</li>
                         <li>Have a go at setting up your first instance using python (see next slide)</li>
                         <li>Have a go at setting up your first instance using terraform (see upcoming slide)</li>
-                        <li>Follow one of the <a href="http://docs.catalystcloud.io/tutorials.html">tutorials</a> that looks interesting</li>
                     </ul>
                 </section>
 
