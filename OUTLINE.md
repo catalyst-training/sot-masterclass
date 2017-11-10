@@ -25,19 +25,19 @@ Here is some pre reading to complete before the session:
 
 ## Ansible
 
-https://www.ansible.com/quick-start-video
+* https://www.ansible.com/quick-start-video
 
 ### Use Cases
 
-https://www.ansible.com/provisioning
-https://www.ansible.com/configuration-management
-https://www.ansible.com/application-deployment
-https://www.ansible.com/continuous-delivery
-https://www.ansible.com/security-and-compliance
-https://www.ansible.com/orchestration
+* https://www.ansible.com/provisioning
+* https://www.ansible.com/configuration-management
+* https://www.ansible.com/application-deployment
+* https://www.ansible.com/continuous-delivery
+* https://www.ansible.com/security-and-compliance
+* https://www.ansible.com/orchestration
 
 ## OpenStack and the Catalyst Cloud
 
-https://www.catalyst.net.nz/catalyst-cloud
-https://www.ibm.com/developerworks/cloud/library/cl-openstack-overview/
-https://opensource.com/resources/what-is-openstack
+* https://www.catalyst.net.nz/catalyst-cloud
+* https://www.ibm.com/developerworks/cloud/library/cl-openstack-overview/
+* https://opensource.com/resources/what-is-openstack
