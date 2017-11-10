@@ -36,7 +36,7 @@ https://www.ansible.com/continuous-delivery
 https://www.ansible.com/security-and-compliance
 https://www.ansible.com/orchestration
 
-## Open Stack and the Catalyst Cloud
+## OpenStack and the Catalyst Cloud
 
 https://www.catalyst.net.nz/catalyst-cloud
 https://www.ibm.com/developerworks/cloud/library/cl-openstack-overview/
